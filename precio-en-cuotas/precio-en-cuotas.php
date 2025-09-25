@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Precio en Cuotas Mejorado
+ * Plugin Name:       Precio en Cuotas Simple
  * Plugin URI:        https://github.com/Victoria-Mondino/precio-en-cuotas.git
- * Description:       Muestra el precio en cuotas de cada producto, configurable por producto o de forma global.
- * Version:           1.1.0
+ * Description:       Muestra el precio en cuotas de cada producto, configurable globalmente o por producto.
+ * Version:           1.0.0
  * Author:            Victoria Mondino
  * Author URI:        https://github.com/Victoria-Mondino/
  * License:           GPL-2.0+
@@ -56,7 +56,7 @@ add_action('woocommerce_product_options_pricing', function() {
     ));
 });
 
-// Guardar valor
+// Guardar valor por producto
 add_action('woocommerce_process_product_meta', function($post_id) {
     $num_cuotas = isset($_POST['_num_cuotas']) ? intval($_POST['_num_cuotas']) : '';
     update_post_meta($post_id, '_num_cuotas', $num_cuotas);
@@ -67,7 +67,7 @@ add_action('woocommerce_process_product_meta', function($post_id) {
 // ==========================
 add_filter('woocommerce_get_price_html', function($price, $product) {
 
-    // Primero el valor del producto
+    // Valor individual del producto
     $num_cuotas = get_post_meta($product->get_id(), '_num_cuotas', true);
 
     // Si no hay valor individual, tomar global
@@ -79,11 +79,10 @@ add_filter('woocommerce_get_price_html', function($price, $product) {
         $precio = $product->get_price();
         $precio_cuota = $precio / $num_cuotas;
 
-        $price .= sprintf('<br><small class="precio-cuotas">%d cuotas de $%s</small>', $num_cuotas, number_format($precio_cuota, 2, ',', '.'));
+        // Se agrega texto simple debajo del precio sin cambiar estilos
+        $price .= sprintf('<br>%d cuotas de $%s', $num_cuotas, number_format($precio_cuota, 2, ',', '.'));
     }
 
     return $price;
 
 }, 10, 2);
-
-;
