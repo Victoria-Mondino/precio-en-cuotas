@@ -86,16 +86,4 @@ add_filter('woocommerce_get_price_html', function($price, $product) {
 
 }, 10, 2);
 
-// ==========================
-// CSS PARA EL FRONTEND
-// ==========================
-add_action('wp_head', function() {
-    echo '<style>
-    .precio-cuotas {
-        display: block;
-        font-size: 14px;
-        color: #555;
-        margin-top: 5px;
-    }
-    </style>';
-});
+;
